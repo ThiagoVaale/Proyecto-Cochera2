@@ -24,7 +24,7 @@ import { environment } from '../../environments/environment';
     }
 
     async getCocheras(){
-      const res =  await fetch('http://localhost:5000/cocheras',{
+      const res =  await fetch('http://localhost:4000/cocheras',{
         headers: {
           authorization:'Bearer '+localStorage.getItem("authToken")
         },
@@ -34,7 +34,7 @@ import { environment } from '../../environments/environment';
         this.cocheras = resJson;
     }
     async getEstacionamiento(){
-    const res =  await fetch('http://localhost:5000/estacionamientos',{
+    const res =  await fetch('http://localhost:4000/estacionamientos',{
       headers: {
         authorization:'Bearer ' +localStorage.getItem("authToken")
       },

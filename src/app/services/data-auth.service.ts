@@ -14,12 +14,11 @@ export class DataAuthService {
   constructor() { 
     const token = this.getToken();
     if(token){
-      if(!this.usuario) this.usuario={
+       this.usuario = { 
         username: "",
         token: token,
         esAdmin: false
       }
-      else this.usuario!.token = token;
     }
   }
 
@@ -49,7 +48,7 @@ export class DataAuthService {
       esAdmin: false // Valor por defecto, que será actualizado más adelante si es necesario.
     };
 
-    localStorage.setItem("authToken", resJson.token);
+    this.setToken(resJson.token);
 
 
     // Obtener detalles del usuario después de la autenticación exitosa.
@@ -73,7 +72,7 @@ export class DataAuthService {
 
   // Método para registrar un nuevo usuario.
   async register(registerData: Register) {
-    const res = await fetch("http://localhost:5000/register", {
+    const res = await fetch("http://localhost:4000/register", {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -85,12 +84,24 @@ export class DataAuthService {
     return res; // Retorna la respuesta del registro.
   }
 
-  getToken(){
-    return localStorage.getItem("authToken")
+  getToken() {
+    // Verifica si se está ejecutando en un entorno del navegador
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem("authToken");
+    }
+    return null; // Retorna null si no está disponible
   }
 
-  clearToken(){
-     localStorage.removeItem("authToken")
+  clearToken() {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("authToken");
+    }
+  }
+
+  private setToken(token: string) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("authToken", token);
+    }
   }
 }
  
