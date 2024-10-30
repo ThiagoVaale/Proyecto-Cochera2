@@ -23,6 +23,9 @@ export class EstadoCocherasComponent {
   esAdmin = true;
   dataCocherasService = inject(DataCocherasService)
 
+  GetCocheras(){
+    this.dataCocherasService.getCocheras();
+  }
  preguntarAgregarCochera(){
     Swal.fire({
       title: "Nueva cochera?",
@@ -70,66 +73,76 @@ export class EstadoCocherasComponent {
       });
     }
 
-    preguntarHabilitarCochera(cocheraId:number){
+    preguntarHabilitarcochera(cocheraId: number){
       Swal.fire({
-        title: "¿Seguro que quiere eliminar esta cochera?",
-        icon: "warning",
+        title: "Habilitar cochera?",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Eliminar",
-        cancelButtonText: "Cancelar"
+        confirmButtonText: "Habilitar",
+        denyButtonText: `Cancelar`
       }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           await this.dataCocherasService.habilitarCochera(cocheraId)
-          // this.dataCocherasService.borrarCochera(index)
-          Swal.fire({title: "Cochera eliminada", icon: "success"});
-        }else if(result.isDenied){
-            Swal.fire("Changes are not saved", "", "info")
-          }
+          Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+        }
       });
     }
-      preguntarDeshabilitarCochera(cocheraId:number){
+    preguntarDeshabilitarCochera(cocheraId: number){
+      Swal.fire({
+        title: "Deshabilitar cochera?",
+        showCancelButton: true,
+        confirmButtonText: "Deshabilitar",
+        denyButtonText: `Cancelar`
+      }).then(async (result) => {
+        
+        if (result.isConfirmed) {
+          await this.dataCocherasService.deshabilitarCochera(cocheraId)
+          
+          Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {            
+        }
+      });
+    }
+      abrirEstacionamiento(idCochera: number) {
+        const idUsuarioIngreso = "ADMIN"
         Swal.fire({
-          title: "¿Seguro que quiere deshabilitar esta cochera?",
+          title: "Abrir Cochera",
+          html: `<input type="text" id="patente" class="swal2-input" placeholder="Ingrese patente">`,
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Eliminar",
-          denyButtonText: "Cancelar"
+          confirmButtonText: "Abrir",
+          cancelButtonText: "Cancelar",
+          willOpen: () => {
+            const titleEl = document.querySelector('.swal2-title') as HTMLElement;
+            const contentEl = document.querySelector('.swal2-html-container') as HTMLElement;
+            const confirmButton = document.querySelector('.swal2-confirm') as HTMLElement;
+            if (titleEl) {
+              titleEl.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+            }
+            if (contentEl) {
+              contentEl.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+            }
+            if (confirmButton){
+              confirmButton.style.backgroundColor = '#ffd000'; 
+              confirmButton.style.color = 'black'; 
+              confirmButton.style.border = 'none'; 
+            }
+          },
+          preConfirm: () => {
+            const patenteInput = document.getElementById("patente") as HTMLInputElement
+            if (!patenteInput || !patenteInput.value) {
+              Swal.showValidationMessage("Por favor, ingrese una patente")
+              return false;
+            }
+            return { patente: patenteInput.value };
+          }
         }).then(async (result) => {
           if (result.isConfirmed) {
-            await this.dataCocherasService.deshabilitarCochera(cocheraId)
-            // this.dataCocherasService.borrarCochera(index)
-            Swal.fire({title: "Cochera eliminada", icon: "success"});
-          }else if(result.isDenied){
-              Swal.fire("Changes are not saved", "", "info")
-            }
-        });
+            const { patente } = result.value;
+            await this.dataCocherasService.abrirEstacionamiento(patente, idUsuarioIngreso, idCochera);
+          }
+        })
       }
-        abrirEstacionamiento(idCochera: number) {
-          const idUsuarioIngreso = "ADMIN"
-          Swal.fire({
-            title: "Abrir Cochera",
-            html: `<input type="text" id="patente" class="swal2-input" placeholder="Ingrese patente">`,
-            showCancelButton: true,
-            confirmButtonText: "Abrir",
-            cancelButtonText: "Cancelar",
-            preConfirm: () => {
-              const patenteInput = document.getElementById("patente") as HTMLInputElement
-              if (!patenteInput || !patenteInput.value) {
-                Swal.showValidationMessage("Por favor, ingrese una patente")
-                return false;
-              }
-              return { patente: patenteInput.value };
-            }
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              const { patente } = result.value;
-              await this.dataCocherasService.abrirEstacionamiento(patente, idUsuarioIngreso, idCochera);
-            }
-          })
-        }
       
         cerrarEstacionamiento(cochera: Cochera) {
           const horario = cochera.estacionamiento?.horaIngreso;
@@ -200,6 +213,6 @@ export class EstadoCocherasComponent {
                       });
                   }
               }
-          });
-        }
-      }
+    });
+  }
+}

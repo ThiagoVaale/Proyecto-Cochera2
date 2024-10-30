@@ -18,7 +18,7 @@ export class DashbordContainerComponent {
   router = inject(Router)
 
   cerrarSesion(){
-    this.authService.clearToken();
+    this.authService.logout();
     this.router.navigate(["/Acceso"])
   }
 }

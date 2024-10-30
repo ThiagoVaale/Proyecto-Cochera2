@@ -6,7 +6,7 @@ export const soloPublicoGuard: CanActivateFn = (route, state) => {
   const dataAuthService = inject(DataAuthService);
   const router = inject(Router);
 
-  if (dataAuthService.usuario) return true;
-  const url = router.parseUrl('/estado-cocheras');
+  if (!dataAuthService.usuario) return true;
+  const url = router.parseUrl('estado-cocheras');
   return new RedirectCommand(url);
 };

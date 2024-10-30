@@ -1,12 +1,26 @@
-<table>
-    <thead>
-        <tr>
-            <th>Tiempo</th>
-            <th>Costo</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    </tbody>
-</table>
+<main class="flex-column-center">
+    <table>
+        <thead>
+            <tr>
+                <th>Tiempo</th>
+                <th>Costo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (tarifa of this.dataTarifasServices.tarifas; track $index) {
+                <tr>
+                    <td>
+                        {{ tarifa.descripcion }}
+                    </td>
+                    <td>
+                        {{ tarifa.valor }}
+                    </td>
+                    <td id="lapiz">
+                        <button (click)="UpdatePrice(tarifa.id)">Actualizar precio</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</main>

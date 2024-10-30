@@ -44,11 +44,12 @@ import { environment } from '../../environments/environment';
       this.estacionamientos = resJson;
   }
 
-  asociarEstacionamientosConCocheras(){
+  asociarEstacionamientosConCocheras() {
     this.cocheras = this.cocheras.map(cochera => {
-      const estacionamiento = this.estacionamientos.find(e => e.idCochera === cochera.id);
-      return { ...cochera, estacionamiento }; // Retorna un nuevo objeto combinando cochera y estacionamiento
+      const estacionamiento = this.estacionamientos.find(e => e.idCochera == cochera.id && !e.horaEgreso)
+      return {...cochera, estacionamiento}
     });
+    console.log(this.estacionamientos)
   }
 
   ultimoNumero = this.cocheras[this.cocheras.length-1]?.id || 0;
@@ -57,108 +58,104 @@ import { environment } from '../../environments/environment';
     //   this.cocheras=[]
     // }
 
-    async agregarCochera(nombreCochera: string){
-      const cochera = {"descripcion" : nombreCochera}
-      const res =  await fetch(environment.API_URL+'cocheras',{
+    async agregarCochera(nombreCochera:string) {
+      const cochera = {"descripcion" : nombreCochera };
+      const res = await fetch('http://localhost:4000/cocheras', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          authorization:'Bearer ' +localStorage.getItem("authToken")
+          authorization:'Bearer '+localStorage.getItem("authToken")
         },
         body: JSON.stringify(cochera)
       })
-        if(res.status !== 200 ) {
-          console.log("Error en la creacion de una nueva cochera")
-        } else{
-          console.log("Creacion de cochera exitosa")
-          await this.loadData();
-        };
-    }
+      if (res.status !== 200) {
+        console.log("Error en la creacion de una nueva cochera")
+      } else {
+        console.log("Creacion de cochera exitosa")
+        this.loadData();
+      }
+    };
 
-    async borrarFila(index:number){
-      const res =  await fetch(environment.API_URL+`cocheras/${index}`,{
+    async borrarFila(id:number){
+      const res = await fetch(`http://localhost:4000/cocheras/${id}`,{
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          authorization:'Bearer ' +localStorage.getItem("authToken")
+          authorization:'Bearer '+ localStorage.getItem("authToken")  
         }
-      })
-        if(res.status !== 200 ) {
-          console.log("Error en la eliminacion de la cochera")
-        } else{
-          console.log("Cochera eliminada con exito")
-          this.loadData()
-        };
-    }
-
-    borrarCochera(index: number){
-      this.cocheras.splice(index, 1)  
-    }
-
-    async deshabilitarCochera(idCochera:number){
-      const res = await fetch(environment.API_URL+'cocheras/'+idCochera+'/disable',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization:'Bearer '+localStorage.getItem("authToken")
-        }
-      })
-      if (res.status === 200) {
-        console.log('Cochera deshabilitada')
-        this.loadData()
-      } else {
-        console.warn('Cochera eliminada con exito') 
-      };
-    }
-
-    async habilitarCochera(idCochera:number){
-      const res = await fetch(environment.API_URL+'cocheras/'+idCochera+'/enable',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization:'Bearer '+localStorage.getItem("authToken")
-        },
-      })
-      if (res.status === 200) {
-        console.log('Cochera habilitada')
-        this.loadData()
-      } else {
-        console.log('Error habilitando cochera')
-      }
-    }
-
-    async abrirEstacionamiento(patente: string, idUsuarioIngreso: string, idCochera: number){
-      const body = {patente, idUsuarioIngreso, idCochera}
-      const res = await fetch(environment.API_URL+'estacionamientos/abrir',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization:'Bearer '+localStorage.getItem("authToken")
-        },
-        body: JSON.stringify(body)
       })
       if (res.status !== 200) {
-        console.log('Error en abrir estacionamiento')
-      } else {
-        console.log('Creacion de estacionamiento exitoso')
-        this.loadData()
-      };
+        console.log('Error en la eliminacion de la cochera')
+      } this.loadData()
     }
+    
+    async deshabilitarCochera(idCochera: number){
+      const res = await fetch('http://localhost:4000/cocheras/'+idCochera+'/disable',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization:'Bearer '+ localStorage.getItem("authToken")
+        },
+        body: JSON.stringify({idCochera})
+      })      
+      if(res.status !== 200) {
+        console.log("Error en la creacion de una nueva cochera")
+        
+      } else {
+        console.log("Creacion de cochera exitosa")
+        this.loadData()
+      }
+  };
 
-    async cerrarEstacionamiento(patente: string, idUsuarioEgreso: string){
-      const body = {patente, idUsuarioEgreso}
-      const res = await fetch(environment.API_URL+'estacionamientos/cerrar',{
+    async habilitarCochera(idCochera: number){
+      const res = await fetch('http://localhost:4000/cocheras/'+idCochera+'/enable',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization:'Bearer '+ localStorage.getItem("authToken")
+          
+        },        
+      })      
+      if(res.status === 200) {
+        console.log("cochera Habilitada")
+      
+        this.loadData();
+      };     
+  }
+
+  async abrirEstacionamiento(patente: string, idUsuarioIngreso: string, idCochera: number){
+    const body = {patente, idUsuarioIngreso, idCochera}
+    const res = await fetch('http://localhost:4000/estacionamientos/abrir',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization:'Bearer '+ localStorage.getItem("authToken")
+      },
+      body: JSON.stringify(body)
+    })
+    if(res.status !== 200) {
+      console.log("Error en abrir estacionamiento")
+    } else { 
+      this.loadData();
+    }
+    
+  } 
+
+    async cerrarEstacionamiento(patente: string, idUsuarioEgreso: string) {
+      const body = {patente, idUsuarioEgreso};
+      const res = await fetch('http://localhost:4000/estacionamientos/cerrar',{
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          authorization:'Bearer '+localStorage.getItem("authToken")
+          authorization:'Bearer ' + localStorage.getItem("authToken")
         },
+        body: JSON.stringify(body)
       })
-      if (res.status !== 200) {
-        console.log('Error en cerrar estacionamiento')
+      if(res.status !== 200) {
+        console.log("Error en el cerrado del estacionamiento")
       } else {
-        console.log('Cerrado de estacionamiento')
-        this.loadData()
-      };
+        console.log("Cerrado del estacionamiento exitoso")
+        this.loadData();
+      };    
     }
   }

@@ -14,11 +14,12 @@ export class DataAuthService {
   constructor() { 
     const token = this.getToken();
     if(token){
-       this.usuario = { 
+       if(!this.usuario) this.usuario = { 
         username: "",
         token: token,
-        esAdmin: false
+        esAdmin: true
       }
+      else this.usuario!.token = token;
     }
   }
 
@@ -36,6 +37,7 @@ export class DataAuthService {
       body: JSON.stringify(loginData)
     });
 
+    console.log(res)
     if (res.status !== 200) return; // Si el status code no devuelve un 200, devuelve un null.
 
     const resJson: ResLogin = await res.json(); // Convierte la respuesta en JSON.
@@ -48,7 +50,7 @@ export class DataAuthService {
       esAdmin: false // Valor por defecto, que será actualizado más adelante si es necesario.
     };
 
-    this.setToken(resJson.token);
+    localStorage.setItem("authToken", resJson.token)
 
 
     // Obtener detalles del usuario después de la autenticación exitosa.
@@ -84,24 +86,17 @@ export class DataAuthService {
     return res; // Retorna la respuesta del registro.
   }
 
+  async logout(){
+    this.clearToken();
+    this.usuario = undefined
+  }
+
   getToken() {
-    // Verifica si se está ejecutando en un entorno del navegador
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem("authToken");
-    }
-    return null; // Retorna null si no está disponible
+    return localStorage.getItem("authToken")
   }
 
   clearToken() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem("authToken");
-    }
-  }
-
-  private setToken(token: string) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("authToken", token);
-    }
+    localStorage.removeItem("authToken")
   }
 }
  

@@ -8,14 +8,11 @@
             <a [routerLink]="['/reportes']" routerLinkActive="link-active">Reportes</a>
             <a [routerLink]="['/precios']" routerLinkActive="link-active">Precios</a>   
         }
-        <div class="Usuario">
-            <a>Usuario</a>
             <div class="cerrarSesion">
                 <button (click)="cerrarSesion()">
                     Cerrar sesión
                 </button>
             </div>
-        </div>
     </nav>
 </header>
 <router-outlet/>    

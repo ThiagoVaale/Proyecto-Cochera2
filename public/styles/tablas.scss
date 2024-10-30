@@ -1,0 +1,159 @@
+#boton-agregar-cocheras{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#boton-agregar-cocheras:hover{
+    cursor: pointer;
+    text-decoration: underline;
+
+}   
+
+.boton-principal{
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}   
+ table{
+    margin: auto;
+    border-collapse: collapse;
+    width: 75%;
+    margin-bottom: 13px;
+}
+
+  thead tr, tbody tr{
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr 1fr;
+    justify-items: center;
+ }
+
+table thead tr{
+    background-color: #FFD700;
+    padding: 4px;
+    margin-bottom: 6px;
+    border-radius: 2px;
+}
+
+th{
+    padding: 2px;
+    text-align: center;
+}
+
+td{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+}
+
+tr{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.596);
+    padding: 4px;
+}
+
+h1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 2px;
+    font-style:italic;
+    font-size: 40px;
+    margin-bottom: 30px;
+    padding: 40px;
+    padding-bottom: 0;
+    font-weight: bold;
+}
+
+.botones-accion{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    button{
+    background-color: white;
+    color: black;
+    border-radius: 3px;
+    border: #FFD700;
+    padding: 4px;
+    font-weight: bold;
+    }
+    .boton-agregar{
+        color: #FFD700;
+        font-size: 25px;
+        font-weight: 500;
+    }
+}
+
+.botones-accion button:hover{
+    text-decoration: underline;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.boton-accion{
+    margin-right: 10px;
+    background-color: white;
+    color: black;
+    border-radius: 3px;
+    border: #FFD700;
+    padding: 4px;   
+    font-weight: bold;
+}
+
+.boton-accion:hover{
+    text-decoration: underline;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.boton-borrar{
+    margin: 0;
+    background-color: white;
+    color: black;
+    border-radius: 3px;
+    border: #FFD700;
+    padding: 4px;
+    font-weight: bold;
+}
+
+.boton-borrar:hover{
+    text-decoration: underline;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.disponible{
+    background-color: green;
+    border-radius: 2px;
+    width: 70px;
+    height: 20px;
+}
+
+.ocupado{
+    background-color: red;
+    border-radius: 2px;
+    width: 70px;
+    height: 20px;
+}
+
+#cerrar-sesion{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    a{
+        text-decoration: none;
+        color: black;
+        padding: 6px;
+        margin-bottom: 6px;
+        border-radius: 2px;
+        text-decoration:underline ;
+    } 
+}
+
+#cerrar-sesion a:hover{
+    color: #FFD700;
+    transition: 0.2s;
+}
