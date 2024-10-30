@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="inicio.component.scss">
+<main>
+    <section id="principal">
+        <div id="contenedor-izquierda">
+            <h1>Bienvenidos a <span>Cochera Ituzaingó</span></h1>
+            <p>Tu vehículo, seguro y protegido</p>
+            <div id="inicio-sesion">
+                <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+                    <div id="ingreso-usuario">
+                        <label for="usuario"></label>
+                        <input type="text" name="username" id="usuario" placeholder="Usuario" ngModel required>
+                        <label for="contraseña"></label>
+                        <input type="password" name="password" id="contraseña" placeholder="Contraseña" ngModel required>
+                    </div>
+                    <button [disabled]="loginForm.invalid" type="submit">Iniciar sesión</button>
+                    @if (errorLogin) {
+                        <p>Error de login</p>
+                    }
+                    <p>¿No estas registrado?<a [routerLink]="['/Registro']"><span> Crea tú cuenta</span></a></p>
+                </form>
+            </div>  
+        </div>
+        <div id="contenedor-derecha">
+            <img src="https://www.misabogados.com/hubfs/egor-myznik-rCZQCbUAQvg-unsplash%20(1)-2.webp" alt="Imagen-derecha">
+        </div>
+    </section>
+</main>
+

@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="register.component.scss">
+<main>
+    <section id="principal">
+        <div id="contenedor-izquierda">
+            <h1>Bienvenidos a <span>Cochera Ituzaingó</span></h1>
+            <p>Tu vehículo, seguro y protegido</p>
+            <div id="inicio-sesion">
+                <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+                    <div id="ingreso-usuario">
+                        <input type="text" name="username" id="usuario" placeholder="Usuario" ngModel required>
+                        <input type="text" name="nombre" id="name" placeholder="Nombre" ngModel required>
+                        <input type="text" name="apellido" id="apell" placeholder="Apellido" ngModel required>
+                        <input type="password" name="password" id="contraseña" placeholder="Contraseña" ngModel required>
+                        <button [disabled]="">Registrarse</button>
+                    </div>
+                    @if (errorRegister) {
+                        <p>Error de registro</p>
+                    }
+                </form>
+            </div>
+        </div>
+        <div id="contenedor-derecha">
+            <img src="https://www.misabogados.com/hubfs/egor-myznik-rCZQCbUAQvg-unsplash%20(1)-2.webp" alt="Imagen-derecha">
+        </div>
+    </section>
+</main>
+

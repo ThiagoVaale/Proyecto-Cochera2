@@ -1,0 +1,65 @@
+@if (dataCocherasService.cocheras.length !==0) {
+    <table>
+        <thead>
+            <tr>
+                <th>Nro</th>
+                <th>Disponible</th>
+                <th>Ingreso</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    
+        <tbody>
+            @for (cochera of dataCocherasService.cocheras; track $index){
+                <tr>
+                    <td>{{cochera.id}}</td>
+                    <td>
+                        @if (cochera.deshabilitada){
+                            Deshabilitada
+                        }@else if (!cochera.estacionamiento?.horaEgreso && cochera.estacionamiento?.horaIngreso) {
+                            <button (click)="cerrarEstacionamiento(cochera)">
+                                {{cochera.estacionamiento?.patente}}
+                            </button>
+                        }@else {
+                            <button (click)="abrirEstacionamiento(cochera.id)">
+                                Disponible
+                            </button>
+                        }
+                    </td>
+                    <td>{{cochera.descripcion}}</td>
+                    <!-- <td [ngClass]="{'disponible': cochera.disponibilidad, 'ocupado': !cochera.disponibilidad}">{{cochera.disponibilidad ? "Disponible" : "Ocupado"}}</td>
+                    <td>{{cochera.ingreso}}</td> -->
+                    <td>
+                        @if (cochera.deshabilitada) {
+                            <button (click)="preguntarDeshabilitarCochera(cochera.id)" class="boton-accion">Deshabilitar</button>
+                        } @else {
+                            <button (click)="preguntarHabilitarCochera(cochera.id)" class="boton-accion">Habilitar</button>
+                        }
+                        @if (esAdmin) {
+                            <button (click)="preguntarBorrarCochera(cochera.id)" class="boton-borrar">Borrar cochera</button>
+                        }
+                    </td>
+                </tr>
+            <!-- } @empty {
+                <button (click)="preguntarPatenteCochera()" class="boton-principal">Agrega cocheras</button>
+            } -->
+            }
+        </tbody>
+    </table>
+    @if (esAdmin) {
+        <div class="botones-accion">
+            <!-- <button (click)="actualizarCochera()"class="boton-tabla">Borrar cocheras</button> -->
+            <button (click)="preguntarAgregarCochera()"class="boton-agregar">+</button>
+        </div>
+    }
+    <footer>
+        <div id="cerrar-sesion">
+            <a [routerLink]="['/Acceso']" >Cerrar sesión</a>    
+        </div>
+    </footer>
+}
+<!-- } @else {
+    <button (click)="agregarCochera()" class="boton-principal" id="boton-agregar-cocheras">¿Deseas agregar cocheras?</button>
+} -->
+
+
